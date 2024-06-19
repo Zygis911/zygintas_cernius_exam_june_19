@@ -32,6 +32,36 @@ const appointmentModel = {
     return result.rows[0];
   },
 
+  // getMyAppointments: async(user_id) => {
+  //   const result = await pool.query("SELECT id, name, description, status FROM appointments WHERE user_id = $1", [user_id])
+  //   const appointment = result.rows
+  // }
+
+
+  getMyAppointments: async (user_id) => {
+    try {
+      const query = `
+        SELECT id, name, description, status
+        FROM appointments
+        WHERE user_id = $1
+      `;
+      const { rows } = await pool.query(query, [user_id]);
+
+      return rows.map(appointment => ({
+        id: appointment.id,
+        name: appointment.name,
+        description: appointment.description,
+        status: appointment.status,
+
+      }));
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+      throw error; 
+    }
+  },
+
+  
+
   // if enough time get all appointments, and search
 };
 

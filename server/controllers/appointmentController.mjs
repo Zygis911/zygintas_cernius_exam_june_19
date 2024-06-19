@@ -99,6 +99,16 @@ const appointmentController = {
       }
     },
 
+    getMyAppointments: async (req, res, next) => {
+      try {
+        const appointments = await appointmentModel.getMyAppointments(req.user.id);
+
+        res.status(200).json(appointments)
+      } catch (error) {
+        next
+      }
+    }
+
     
 
 

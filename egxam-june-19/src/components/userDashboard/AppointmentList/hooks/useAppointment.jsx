@@ -2,17 +2,16 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useState,
 } from "react";
 
 import appointmentModel from "../../../../apis/appointment";
 
-const AppointmentContext = createContext();
+ const AppointmentContext = createContext();
 
-const useAppointments = () => useContext(AppointmentContext);
+export const useAppointments = () => useContext(AppointmentContext);
 
-const AppointmentProvider = ({ children }) => {
+export const AppointmentProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [appointment, setAppointments] = useState([]);
@@ -64,5 +63,25 @@ const AppointmentProvider = ({ children }) => {
     return [response.status, response.data];
   });
 
-  
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+        const response = await appointmentModel.getMyAppointments()
+        if (response.status === 200) {
+            setAppointments(response.data)
+        }
+        setIsLoading(false)
+    })();
+  }, [fetchAppointments]);
+
+    return (
+        <AppointmentContext.Provider value={{ 
+            appointment, showCreateForm, OpenCreateForm, CloseCreateForm,
+            updateAppointment, showUpdateForm, OpenUpdateForm, CloseUpdateForm, activeAppointment,
+            deleteAppointment, FetchAppointments, fetchAppointments,
+        }}>
+            {children}
+        </AppointmentContext.Provider>
+    )
 };
