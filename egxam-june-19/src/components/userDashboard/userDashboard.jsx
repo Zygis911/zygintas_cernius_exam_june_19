@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { fetchUserData } from "../../api/apis";
+// import { fetchUserData } from "../../api/apis";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../utils/AuthContext";
 import { AppointmentList } from "./AppointmentList/AppoointmentList";
