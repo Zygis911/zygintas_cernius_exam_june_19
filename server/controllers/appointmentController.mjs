@@ -30,10 +30,10 @@ const appointmentController = {
           return res.status(401).json({ message: "unauthorized access" });
         }
   
-        const appointmeentId = req.params.id;
+        const appointmentId = req.params.id;
   
         const appointment = await appointmentModel.getAppointmentById(
-          appointmeentId
+          appointmentId
         );
         // appointment existence check
   
@@ -46,6 +46,62 @@ const appointmentController = {
         next(error);
       }
     },
+
+    deleteAppointment: async(req, res, rext) => {
+      try {
+        // checking if user is authenticated to be able to delete the appointment
+        if(!req.user) {
+          return res.status(401).json({message: "unauthorized access"})
+        }
+
+        const id = req.params.id;
+
+        // retrieve appointment
+
+        const appointment = await appointmentModel.getAppointmentById(id);
+
+        if(!appointment) {
+          return res.status(400).json({message: "appointment does not exist"})
+        }
+
+        // missing user authentication, later 
+
+        await appointmentModel.deleteAppointment(id);
+
+        return res.status(200).json({message: "appointment deleted successfully"})
+      } catch (error) {
+        next(error);
+      }
+    },
+
+    updateAppointment: async (req, res, next) => {
+      try {
+
+        if (!req.user) {
+            res.status(401).json({message: "you dont have the authorization to update this project"})
+        }
+ 
+        const {id, name, description, status} = req.body;
+
+        const appointment = await appointmentModel.getAppointmentById(id);
+
+        if(!appointment) {
+          return res.status(400).json({message: "appointment does not exist"})
+        }
+        
+        // authorizacion, if enough time (pworker logic)
+
+        await appointmentModel.updateAppointment({id, name, description, status});
+        return res.status(200).json({message: "appointment updated successfully"})
+        
+      } catch (error) {
+        next(error);
+      }
+    },
+
+    
+
+
   };
   
   export default appointmentController;

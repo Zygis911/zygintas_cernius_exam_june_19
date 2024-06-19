@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "universal-cookie";
 
-const BASE_URL = "http://localhost:3001/api";
+const BASE_URL = "http://localhost:3002/api";
 
 export const apiClient = axios.create({ baseURL: BASE_URL });
 
